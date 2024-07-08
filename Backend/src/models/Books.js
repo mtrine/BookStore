@@ -1,10 +1,11 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
-
+const Genres = require('./Genres');
+const Publisher = require('./Publisher');
 const Books = sequelize.define('Books', {
-    bookName:{
+    bookName: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
         validate: {
             len: {
                 args: [1, 255],
@@ -14,28 +15,38 @@ const Books = sequelize.define('Books', {
     },
     price:{
         type: DataTypes.INTEGER,
-        allowNull: true,
+        allowNull: false,
         validate: {
-            min: {
-                args: [0],
-                msg: "Price must be greater than 0."
+            isInt: {
+                msg: "Price must be an integer."
             }
         }
+    },
+    releaseYear:{
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+            isDate: {
+                msg: "Release date must be a date."
+            }
+        }
+    
     },
     image:{
         type: DataTypes.STRING,
         allowNull: true
     },
+    description:{
+        type: DataTypes.TEXT,
+        allowNull: true
+    },
 },
 {
-    timestamps: true
+    timestamps: true 
 }
 );
-sequelize.sync({ force: false }) // Đặt `force: true` nếu muốn xóa và tạo lại bảng mỗi lần chạy
-.then(() => {
-  console.log('Database & tables created!');
-})
-.catch((err) => {
-  console.error('Unable to sync database:', err);
-});
+Books.belongsToMany(Genres, { through: 'BooksGenres' });
+Books.belongsTo(Publisher);
+Publisher.hasMany(Books);
+sequelize.sync()
 module.exports = Books;

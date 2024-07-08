@@ -1,4 +1,5 @@
 const Users = require('../models/User');
+const Cart = require('../models/Cart');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 require('dotenv').config({path: __dirname + '/.env'});
@@ -15,6 +16,10 @@ const authController={
                 username: req.body.username,
                 email: req.body.email,
                 password: hashedPassword
+            });
+            //Create cart for new user
+            await Cart.create({
+                UserId: newUser.id
             });
             res.status(201).json(newUser);
         } catch (error) {
@@ -84,7 +89,7 @@ const authController={
         if(!refreshToken){
             return res.status(400).json({message:"User not authenticated"});
         }   
-        if(!refreshTokens.includes(refreshToken)){// Check if refresh token is valid
+        if(!refreshTokens.includes(refreshToken)){
             return res.status(400).json({message:"Refresh token is not valid"});
         }
         jwt.verify(refreshToken,process.env.REFRESH_TOKEN_SECRET,(err,user)=>{

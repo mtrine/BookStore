@@ -46,11 +46,5 @@ const Users = sequelize.define('Users', {
     timestamps: true 
 }
 );
-sequelize.sync({ force: false }) // Đặt `force: true` nếu muốn xóa và tạo lại bảng mỗi lần chạy
-.then(() => {
-  console.log('Database & tables created!');
-})
-.catch((err) => {
-  console.error('Unable to sync database:', err);
-});
+
 module.exports = Users;

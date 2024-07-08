@@ -15,5 +15,11 @@ const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, proces
     }
   })();
 
- 
+  sequelize.sync() // Đặt `force: true` nếu muốn xóa và tạo lại bảng mỗi lần chạy
+  .then(() => {
+    console.log('Database & tables created!');
+  })
+  .catch((err) => {
+    console.error('Unable to sync database:', err);
+  });
 module.exports = sequelize;

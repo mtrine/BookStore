@@ -4,7 +4,8 @@ const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 const authRoute = require('./routes/auth');
 const userRoute = require('./routes/users');
-const booksRoute = require('./routes/books');
+const bookRoute = require('./routes/books');
+const cartRoute=require('./routes/cart');
 dotenv.config();
 
 const app = express();
@@ -17,7 +18,6 @@ const corsOptions = {
 
 app.use(cors(corsOptions));
 
-// Set up CSP to allow required scripts
 
 
 app.use(cookieParser());
@@ -30,4 +30,7 @@ app.listen(port, () => {
 // Routes
 app.use('/v1/auth', authRoute);
 app.use('/v1/user', userRoute);
-app.use('/v1/books', booksRoute);
+app.use('/v1/books', bookRoute);
+app.use('/v1/cart',cartRoute);
+
+
